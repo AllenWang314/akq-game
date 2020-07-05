@@ -19,7 +19,9 @@ func newRouter(hub *socket.Hub) *echo.Echo {
 	// Room controller
 	room := new(controllers.RoomController)
 	e.POST("/api/rooms", room.CreateRoom)
-	e.GET("/api/rooms/:id", room.GetRoom)
-
+	e.GET("/api/rooms/:slug", room.GetRoom)
+	e.DELETE("/api/rooms/:slug", room.DeleteRoom)
+	e.PUT("/api/rooms/:slug", room.UpdateRoom)
+	
 	return e
 }

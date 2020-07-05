@@ -25,7 +25,7 @@ func Init(port int) {
 
 	// REST endpoints
 	r := newRouter(hub)
-	http.Handle("/api", r)
+	http.Handle("/", r)
 
 	addr := ":" + strconv.Itoa(port)
 

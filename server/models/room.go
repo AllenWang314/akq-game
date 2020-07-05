@@ -5,7 +5,9 @@ import (
 )
 
 type Room struct {
-	Slug string `json:"id"`
+	Id int `json:"id"`
+	Slug string `json:"slug"`
+	NumClients int `json:"num_clients"`
 }
 
 func (r *Room) Init() *Room {
