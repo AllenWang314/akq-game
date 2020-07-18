@@ -28,6 +28,8 @@ func Init(reset bool) {
 	if err != nil {
 		panic(err)
 	}
+	defer database.Close()
+	
 	// if no error ping is successful
 	fmt.Println("Ping to database successful, connection is up!")
 
