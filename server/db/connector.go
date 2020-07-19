@@ -15,7 +15,7 @@ var (
 	database *sql.DB
 )
 
-// Initial method taht creates connection with database
+// Initial method that creates connection with database
 func Init(reset bool) {
 	config := config.GetConfig()
 	db, err := sql.Open("postgres", config.GetString("db.uri"))
@@ -28,7 +28,6 @@ func Init(reset bool) {
 	if err != nil {
 		panic(err)
 	}
-	defer database.Close()
 	
 	// if no error ping is successful
 	fmt.Println("Ping to database successful, connection is up!")
@@ -50,6 +49,7 @@ func InitializeTable() {
 		"slug text," + 
 		"num_clients integer)")
 	if err != nil {
+		fmt.Println("Error in InitializeTable of connector.go")
 		panic(err)
 	}
 	fmt.Println(res)
@@ -57,6 +57,7 @@ func InitializeTable() {
 
 // POST request for database
 func InsertRoom(r *models.Room) (roomData *models.Room) {
+	fmt.Println("insert room reached")
 	slug, _ := uuid.NewUUID()
 
 	room := new(models.Room).Init()
@@ -65,6 +66,7 @@ func InsertRoom(r *models.Room) (roomData *models.Room) {
 	err := database.QueryRow(query).Scan(&room.Id, &room.Slug, &room.NumClients)
 
 	if err != nil {
+		fmt.Println("Error in InsertRoom of connector.go")
 		panic(err)
 	}
 
@@ -79,6 +81,7 @@ func DeleteRoom(slug string) (roomData *models.Room) {
 	err := database.QueryRow(query).Scan(&room.Id, &room.Slug, &room.NumClients)
 
 	if err != nil {
+		fmt.Println("Error in DeleteRoom of connector.go")
 		panic(err)
 	}
 
@@ -93,6 +96,7 @@ func UpdateRoom(r *models.Room) (roomData *models.Room) {
 	err := database.QueryRow(query).Scan(&room.Id, &room.Slug, &room.NumClients)
 
 	if err != nil {
+		fmt.Println("Error in UpdateRoom of connector.go")
 		panic(err)
 	}
 
@@ -107,6 +111,7 @@ func GetRoom(slug string) (roomData *models.Room) {
 	err := database.QueryRow(query).Scan(&room.Id, &room.Slug, &room.NumClients)
 
 	if err != nil {
+		fmt.Println("Error in GetRoom of connector.go")
 		panic(err)
 	}
 

@@ -27,6 +27,7 @@ func Init(port int) {
 	r := newRouter(hub)
 	http.Handle("/", r)
 
+
 	addr := ":" + strconv.Itoa(port)
 
 	// Start the server
