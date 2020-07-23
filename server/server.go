@@ -24,7 +24,10 @@ func Init(port int) {
 
 	// REST endpoints
 	r := newRouter()
-	http.Handle("/", r)
+	// http.Handle("/", r)
+	mux := http.NewServeMux()
+	mux.Handle("/", http.FileServer(http.Dir("build")))
+	mux.Handle("/api/", r)
 
 	addr := ":" + strconv.Itoa(port)
 
