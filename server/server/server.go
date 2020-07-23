@@ -13,21 +13,25 @@ func Init(port int) {
 
 	// Wait for socket messages
 	go hub.Run()
-
+	
 	// Websocket connection endpoint
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		socket.ServeWs(hub, w, r)
 	})
 
-	// REST endpoints
+	// // REST endpoints
 	r := newRouter()
-	http.Handle("/", r)
+	// http.Handle("/api", r)
+
+	mux := http.NewServeMux()
+	mux.Handle("/", http.FileServer(http.Dir("build")))
+	mux.Handle("/api/", r)
 
 	addr := ":" + strconv.Itoa(port)
 
 	// Start the server
 	fmt.Println("Serving at", addr)
-	err := http.ListenAndServe(addr, nil)
+	err := http.ListenAndServe(addr, mux)
 
 	if err != nil {
 		fmt.Println("yeet")
