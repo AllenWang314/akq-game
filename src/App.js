@@ -17,6 +17,7 @@ class App extends Component {
       modal: false,
     }
     this.createGame = this.createGame.bind(this)
+    this.joinGame = this.joinGame.bind(this)
   }
 
   createGame() {
@@ -30,6 +31,12 @@ class App extends Component {
     })
   }
 
+  joinGame() {
+    this.setState({
+      redirect: "/room/" + prompt("Enter room code:")
+    });
+  }
+
   render() {
     return (
       <BrowserRouter>
@@ -41,7 +48,10 @@ class App extends Component {
             <Route path="/" render={() => {return (
               <div className="App">
                 <header className="App-header">
-                  <Button size="large" onClick = {this.createGame}>Create Game</Button> 
+                  <div className="button-panel">
+                    <Button size="large" onClick = {this.createGame}>Create Game</Button>
+                    <Button size="large" onClick = {this.joinGame}>Join Game</Button>
+                  </div>
                 </header>
               </div>
             );}} />
