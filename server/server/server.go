@@ -13,11 +13,6 @@ func Init(port int) {
 
 	// Wait for socket messages
 	go hub.Run()
-	
-	// Websocket connection endpoint
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		socket.ServeWs(hub, w, r)
-	})
 
 	// // REST endpoints
 	r := newRouter()
@@ -26,6 +21,11 @@ func Init(port int) {
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(http.Dir("build")))
 	mux.Handle("/api/", r)
+
+	// Websocket connection endpoint
+	mux.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		socket.ServeWs(hub, w, r)
+	})
 
 	addr := ":" + strconv.Itoa(port)
 

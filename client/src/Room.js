@@ -388,6 +388,9 @@ class Room extends Component {
                     {this.message()}
                     {this.buttonPanel()}
                     {this.score()}
+                    <div className="game-code">
+                        Game code is: {this.state.slug}
+                    </div>
                 </header>
                 <Modal
                     size='small'
@@ -404,7 +407,8 @@ class Room extends Component {
                             <ul>
                                 <li>On the top of the page, there will be a help button
                                 containing the rules should you need it. </li>
-                                <li> Only share the link with one other person. </li>
+                                <li> Your game code is {this.state.slug} </li>
+                                <li> Only share the game code with one other person. </li>
                                 <li>Never refresh or press back; all progress will be lost. </li>
                                 <li> There may be lag at times so please be patient. </li>
                                 <li> If the site breaks down or is taking too long, both players should exit and create a new game. </li>
