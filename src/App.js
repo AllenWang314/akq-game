@@ -7,7 +7,7 @@ import Room from "./Room";
 
 import './App.css';
 
-const api = "http://localhost:8080/api"
+const api = "https://akq-game.herokuapp.com/api"
 
 class App extends Component {
   constructor(props) {
