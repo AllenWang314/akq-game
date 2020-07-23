@@ -97,6 +97,13 @@
   padding-bottom: 5px;
   font-size: calc(10px + 0.5vmin);
 }
+.game-code{
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: calc(10px + 0.5vmin);
+  position: absolute;
+  bottom: 25px;
+}
 
 #navbar {
   position: absolute;
