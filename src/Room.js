@@ -51,7 +51,7 @@ class Room extends Component {
     }
 
     componentDidMount() {
-        this.conn = new WebSocket('ws://akq-game.herokuapp.com/ws');
+        this.conn = new WebSocket('wss://akq-game.herokuapp.com/ws');
         this.conn.onmessage = (message) => {
             this.handleMessage(JSON.parse(message.data));
         };
