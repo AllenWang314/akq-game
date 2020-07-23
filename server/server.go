@@ -32,8 +32,9 @@ func Init(port int) {
 	addr := ":" + strconv.Itoa(port)
 
 	// Start the server
+	
 	fmt.Println("Serving at", addr)
-	err := http.ListenAndServe(addr, nil)
+	err := http.ListenAndServe(addr, mux)
 
 	if err != nil {
 		fmt.Println("yeet")
