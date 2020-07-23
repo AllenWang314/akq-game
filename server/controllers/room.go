@@ -30,14 +30,23 @@ func (r RoomController) CreateRoom(c echo.Context) error {
 // PUT /rooms/<room_id> - updates a room
 func (r RoomController) UpdateRoom(c echo.Context) error {
 	// Create new room model, parse JSON body
-	var ttt = new(models.Room)
-	if err := c.Bind(ttt); err != nil {
-		fmt.Println("yeeting hell")
+	var room = new(models.Room)
+	if err := c.Bind(room); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid json")
 	}	
-	ttt.Slug = c.Param("slug")
+	room.Slug = c.Param("slug")
 
-	roomData := db.UpdateRoom(ttt)
+	roomData := db.UpdateRoom(room)
+
+	return c.JSON(http.StatusOK, roomData)
+}
+
+// PUT /rooms/<room_id> - increments number of clients in a room
+func (r RoomController) IncrementClients(c echo.Context) error {
+	// Create new room model, parse JSON body	
+	slug := c.Param("slug")
+
+	roomData := db.IncrementClients(slug)
 
 	return c.JSON(http.StatusOK, roomData)
 }

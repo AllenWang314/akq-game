@@ -118,6 +118,21 @@ func GetRoom(slug string) (roomData *models.Room) {
 	return room
 }
 
+// PUT request for incrementing numclients
+func IncrementClients(slug string) (roomData *models.Room) {
+	room := new(models.Room).Init()
+	query := fmt.Sprintf(`UPDATE rooms SET num_clients = num_clients + 1 WHERE slug = '%s' RETURNING *`, 
+		slug)
+	err := database.QueryRow(query).Scan(&room.Id, &room.Slug, &room.NumClients)
+
+	if err != nil {
+		fmt.Println("Error in IncrementClients of connector.go")
+		panic(err)
+	}
+
+	return room
+}
+
 func ListenForUpdates(callback func(msg []byte)) {
 
 	for {

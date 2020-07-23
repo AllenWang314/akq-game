@@ -2,10 +2,11 @@ package socket
 
 import (
 	"github.com/google/uuid"
+
 	"github.com/gorilla/websocket"
 )
 
-// Client is a middleman between the websocket connection and the hub.
+// Client is a type that reads and writes on sockets.
 type Client struct {
 	hub *Hub
 

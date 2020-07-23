@@ -14,6 +14,6 @@ func (m SocketMessage) MarshalBinary() ([]byte, error) {
 	return json.Marshal(m)
 }
 
-// func (m SocketMessage) UnmarshalBinary(data []byte) error {
-// 	return json.Unmarshal(data, m)
-// }
+func (m SocketMessage) UnmarshalBinary(data []byte) error {
+	return json.Unmarshal(data, m)
+}

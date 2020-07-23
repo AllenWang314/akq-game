@@ -1,15 +1,14 @@
 package socket
 
 import (
+	"log"
 	"encoding"
 	"encoding/json"
-	"log"
 
 	"github.com/AllenWang314/akq-game/socket/packet"
 )
 
-// Hub maintains the set of active clients and broadcasts messages to the
-// clients.
+// Hub maintains the set of active clients
 type Hub struct {
 	// Registered clients.
 	clients map[string]*Client
@@ -37,41 +36,31 @@ func (h *Hub) Run() {
 	for {
 		select {
 		case client := <-h.register:
+			log.Println("A client has joined")
 			h.clients[client.id] = client
 		case client := <-h.unregister:
 			// When a client disconnects, remove them from our clients map
+			log.Println("A client has disconnected")
 			delete(h.clients, client.id)
 			close(client.send)
-
 		case message := <-h.broadcast:
 			// Process incoming messages from clients
+			log.Println("Received message from client")
 			h.processMessage(message)
 		}
 	}
 }
 
 // Sends a message to all of our clients
-func (h *Hub) Send(room string, msg encoding.BinaryMarshaler) {
+func (h *Hub) Send(slug string, msg encoding.BinaryMarshaler) {
 	data, _ := msg.MarshalBinary()
-	h.SendBytes(room, data)
+	h.SendBytes(data)
 }
 
-func (h *Hub) SendBytes(room string, msg []byte) {
-	for id := range h.clients {
-		client := h.clients[id]
-
-		// TODO: If this send fails, disconnect the client
+func (h *Hub) SendBytes(msg []byte) {
+	log.Println("Sending message to all clients")
+	for _ , client := range h.clients {
 		client.send <- msg
-	}
-}
-
-// Processes an incoming message from Redis
-func (h *Hub) ProcessRedisMessage(msg []byte) {
-	var res map[string]interface{}
-	json.Unmarshal(msg, &res)
-
-	switch res["type"] {
-
 	}
 }
 
@@ -81,11 +70,36 @@ func (h *Hub) processMessage(m *SocketMessage) {
 
 	if err := json.Unmarshal(m.msg, &res); err != nil {
 		// TODO: Log to Sentry or something -- this should never happen
-		log.Println("ERROR: Received invalid JSON message from", m.sender.id, "->", m.msg)
+		log.Println("ERROR: Received invalid JSON message in processMessage!")
 		return
 	}
 
 	switch res.Type {
+	case "join":
+		log.Println("Received join packet")
+		res := packet.JoinPacket{}
+		json.Unmarshal(m.msg, &res)
+
+		h.Send(res.Slug, res)
+	case "round":
+		log.Println("Received round packet")
+		res := packet.RoundPacket{}
+		json.Unmarshal(m.msg, &res)
 	
+		res.GenerateCard()
+		h.Send(res.Slug, res)
+	case "turn":
+		log.Println("Received turn packet")
+		res := packet.TurnPacket{}
+		json.Unmarshal(m.msg, &res)
+
+		h.Send(res.Slug, res)
+	case "finish":
+		log.Println("Received finish packet")
+		res := packet.TurnPacket{}
+		json.Unmarshal(m.msg, &res)
+
+		h.Send(res.Slug, res)
 	}
+
 }

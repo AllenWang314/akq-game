@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/AllenWang314/akq-game/socket"
-	"github.com/AllenWang314/akq-game/db"
 )
 
 func Init(port int) {
@@ -15,18 +14,14 @@ func Init(port int) {
 	// Wait for socket messages
 	go hub.Run()
 
-	// Listen for events from clients
-	go db.ListenForUpdates(hub.ProcessRedisMessage)
-
 	// Websocket connection endpoint
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		socket.ServeWs(hub, w, r)
 	})
 
 	// REST endpoints
-	r := newRouter(hub)
+	r := newRouter()
 	http.Handle("/", r)
-
 
 	addr := ":" + strconv.Itoa(port)
 
@@ -35,6 +30,7 @@ func Init(port int) {
 	err := http.ListenAndServe(addr, nil)
 
 	if err != nil {
+		fmt.Println("yeet")
 		panic(err)
 	}
 }

@@ -1,3 +1,4 @@
+
 package socket
 
 import (
@@ -43,14 +44,12 @@ func (c *Client) readPump() {
 		c.hub.unregister <- c
 		c.conn.Close()
 	}()
-
 	c.conn.SetReadLimit(maxMessageSize)
 	c.conn.SetReadDeadline(time.Now().Add(pongWait))
 	c.conn.SetPongHandler(func(string) error {
 		c.conn.SetReadDeadline(time.Now().Add(pongWait))
 		return nil
 	})
-
 	for {
 		_, message, err := c.conn.ReadMessage()
 		if err != nil {
@@ -114,6 +113,7 @@ func (c *Client) writePump() {
 
 // ServeWs handles websocket requests from the peer.
 func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
+	// TODO: Create more strict origin checks -- this is a security risk
 	upgrader.CheckOrigin = func(r *http.Request) bool {
 		return true
 	}
@@ -125,8 +125,6 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 		log.Println("ERROR: Unable to upgrade connection to WS")
 		return
 	}
-
-	log.Println("successfully connected to ws")
 
 	// Create a new client with a unique ID
 	client := NewClient(hub, conn)
