@@ -19,8 +19,8 @@ func Init(port int) {
 		socket.ServeWs(hub, w, r)
 	})
 
-	fs := http.FileServer(http.Dir("./build"))
-  	http.Handle("/", fs)
+	// fs := http.FileServer(http.Dir("./build"))
+  	// http.Handle("/", fs)
 
 	// REST endpoints
 	r := newRouter()
@@ -30,7 +30,7 @@ func Init(port int) {
 
 	// Start the server
 	fmt.Println("Serving at", addr)
-	err := http.ListenAndServe(process.env.PORT, nil)
+	err := http.ListenAndServe(addr, nil)
 
 	if err != nil {
 		fmt.Println("yeet")
