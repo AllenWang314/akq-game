@@ -3,6 +3,7 @@ module github.com/AllenWang314/akq-game
 go 1.14
 
 require (
+	github.com/golang/go v1.14.0
 	github.com/deckarep/golang-set v1.7.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-redis/redis v6.15.8+incompatible
