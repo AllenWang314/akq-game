@@ -19,6 +19,9 @@ func Init(port int) {
 		socket.ServeWs(hub, w, r)
 	})
 
+	fs := http.FileServer(http.Dir("./build"))
+  	http.Handle("/", fs)
+
 	// REST endpoints
 	r := newRouter()
 	http.Handle("/", r)
