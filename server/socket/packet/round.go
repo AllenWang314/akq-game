@@ -15,22 +15,21 @@ type RoundPacket struct {
 	Slug string `json:"slug,omitempty"`
 
 	Valid bool
-	Player1Card string
-	Player2Card string
+	Player1Card int
+	Player2Card int
 
 }
 
 func (p *RoundPacket) GenerateCard() {
-	arr := []string{"A", "K", "Q"}
 	if p.PlayerNumber != 2 {
 		p.Valid = false;
 	} else {
 		p.Valid = true;
 		rand.Seed(time.Now().UnixNano())
 		p1 := rand.Intn(3)
-		p2 := (p1 + 1 + rand.Intn(1)) % 3
-		p.Player1Card = arr[p1]
-		p.Player2Card = arr[p2]
+		p2 := (p1 + 1 + rand.Intn(2)) % 3
+		p.Player1Card = p1
+		p.Player2Card = p2
 	}
 }
 

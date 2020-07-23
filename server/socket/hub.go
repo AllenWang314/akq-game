@@ -96,7 +96,7 @@ func (h *Hub) processMessage(m *SocketMessage) {
 		h.Send(res.Slug, res)
 	case "finish":
 		log.Println("Received finish packet")
-		res := packet.TurnPacket{}
+		res := packet.FinishPacket{}
 		json.Unmarshal(m.msg, &res)
 
 		h.Send(res.Slug, res)

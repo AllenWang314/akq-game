@@ -7,6 +7,7 @@ import Rules from "./Rules";
 import './App.css';
 
 const api = "http://localhost:8080/api/"
+const cards = ["A", "K", "Q"]
 
 class Room extends Component {
     constructor(props) {
@@ -21,11 +22,10 @@ class Room extends Component {
             // 3 means final result displayed + update score + next round button appears
             // 4 is waiting page for both players to hit next round
             gameState: 0,
-            turn: false,
             playerNumber: 0,
             myScore: 100,
             opponentScore: 100,
-            myCard: "",
+            myCard: -1,
             opponentCard: "",
             roundNumber: 0,
             modal: true,
@@ -34,6 +34,8 @@ class Room extends Component {
             winner: 0,
             pot: 0,
             rules: false,
+            finish: 0,
+            waiting: false,
         }
         this.message = this.message.bind(this)
         this.buttonPanel = this.buttonPanel.bind(this)
@@ -60,8 +62,20 @@ class Room extends Component {
         if (message.slug === this.state.slug) {
             if (message.type === "join") this.handleJoin(message.player_number);
             else if (message.type === "turn") this.handleTurn(message.player_number, message.action);
-            else if (message.type === "round" && message.player_number === 2) this.handleCards(message);
-            else console.log("invalid message")
+            else if (message.type === "round" && message.Valid) this.handleCards(message);
+            else if (message.type === "finish") this.handleFinish(message);
+        }
+    }
+
+    handleFinish(message) {
+        if (this.state.finish + message.player_number === 3) {
+            this.nextRound();
+        } else{
+            this.setState({
+                opponentScore: (this.state.winner !== this.state.playerNumber)? this.state.opponentScore + this.state.pot : this.state.opponentScore,
+                myScore: (this.state.winner === this.state.playerNumber)? this.state.myScore + this.state.pot : this.state.myScore,
+                finish: message.player_number,
+            });   
         }
     }
 
@@ -78,6 +92,9 @@ class Room extends Component {
                     myScore: this.state.myScore - 1,
                     opponentScore: this.state.opponentScore -1,
                     pot: 2,
+                    finish:0,
+                    waiting: false,
+                    winner:0,
                 })
             } else {
                 this.setState({
@@ -90,12 +107,15 @@ class Room extends Component {
                     myScore: this.state.myScore - 1,
                     opponentScore: this.state.opponentScore -1,
                     pot: 2,
+                    finish:0,
+                    waiting: false,
+                    winner:0,
                 })
             }
         } else {
             if (this.state.playerNumber === 1) {
                 this.setState({
-                    roundNumber: this.state.roundNumber,
+                    roundNumber: this.state.roundNumber + 1,
                     playerNumber: this.state.playerNumber % 2 + 1,
                     myCard: message.Player2Card,
                     opponentCard: message.Player1Card,
@@ -105,10 +125,13 @@ class Room extends Component {
                     myScore: this.state.myScore - 1,
                     opponentScore: this.state.opponentScore -1,
                     pot: 2,
+                    finish:0,
+                    waiting: false,
+                    winner:0,
                 })
             } else {
                 this.setState({
-                    roundNumber: this.state.roundNumber,
+                    roundNumber: this.state.roundNumber + 1,
                     playerNumber: this.state.playerNumber % 2 + 1,
                     myCard: message.Player1Card,
                     opponentCard: message.Player2Card,
@@ -118,6 +141,9 @@ class Room extends Component {
                     myScore: this.state.myScore - 1,
                     opponentScore: this.state.opponentScore -1,
                     pot: 2,
+                    finish:0,
+                    waiting: false,
+                    winner:0,
                 })
             }
         }
@@ -135,11 +161,16 @@ class Room extends Component {
                 this.setState({
                     gameState: 2,
                     myAction: action,
+                    pot: (action === "raise")? this.state.pot + 1 : this.state.pot,
+                    myScore: (action === "raise")? this.state.myScore - 1 : this.state.myScore,
                 })
             } else if (playerNumber === 2) {
                 this.setState({
                     gameState: 3,
                     opponentAction: action,
+                    opponentScore: (action === "match" && this.state.pot === 3)? this.state.opponentScore - 1 : this.state.opponentScore,
+                    pot: (action === "match" && this.state.pot === 3)? this.state.pot + 1 : this.state.pot,
+                    winner: (this.state.myCard < this.state.opponentCard || action === "give up") ? 1 : 2
                 })
             }
         } else if (this.state.playerNumber === 2) {
@@ -147,11 +178,16 @@ class Room extends Component {
                 this.setState({
                     gameState: 2,
                     opponentAction: action,
+                    opponentScore: (action === "raise")? this.state.opponentScore - 1 : this.state.opponentScore,
+                    pot: (action === "raise")? this.state.pot + 1 : this.state.pot,
                 })
             } else if (playerNumber === 2) {
                 this.setState({
                     gameState: 3,
                     myAction: action,
+                    myScore: (action === "match" && this.state.pot === 3)? this.state.myScore - 1 : this.state.myScore,
+                    pot: (action === "match" && this.state.pot === 3)? this.state.pot + 1 : this.state.pot,
+                    winner: (this.state.myCard > this.state.opponentCard || action === "give up") ? 1 : 2
                 })
             }
         }
@@ -169,7 +205,17 @@ class Room extends Component {
     }
 
     finishRound() {
+        let finishPacket = {
+            type: 'finish',
+            player_number: this.state.playerNumber,
+            slug: this.state.slug
+        };
 
+        // Connected to remote
+        this.conn.send(JSON.stringify(finishPacket));
+        this.setState({
+            waiting: true
+        })
     }
 
     join() {
@@ -209,16 +255,15 @@ class Room extends Component {
         })
     }
 
-    // a lot of changing
     message() {
-        if (this.state.myCard === "") {
+        if (this.state.myCard === -1 || this.state.waiting) {
             return (
                 <div />
             )
         } else {
             return (
-                <div className="message">
-                    Round {this.state.roundNumber}: You have been dealt {this.state.myCard}
+                <div className="round">
+                    Round {this.state.roundNumber}: You have been dealt {cards[this.state.myCard]}
                 </div>
             )
         }
@@ -227,14 +272,12 @@ class Room extends Component {
     result() {
         if (this.state.playerNumber === 1 || this.state.playerNumber === 2) {
             return (
-                <div className="button-panel">
-                    Results:
-                    Your card: {this.state.myCard}
-                    Opponent's card: {this.state.opponentCard}
-                    Your action: {this.state.myAction}
-                    Opponent's action: {this.state.opponentAction}
-                    You win {(this.state.winner === this.state.playerNumber)? this.state.pot : 0}
-                    <div className="column"><Button onClick={() => { this.finishRound }}>Next Round</Button></div>
+                <div className="result">
+                    <div className="result-header">Results:</div>
+                    <div className="result-bit">Your card: {cards[this.state.myCard]}, Opponent's card: {cards[this.state.opponentCard]}</div>
+                    <div className="result-bit">Your action: {this.state.myAction}, Opponent's action: {this.state.opponentAction}</div>
+                    <div className="result-bit">You win {(this.state.winner === this.state.playerNumber)? this.state.pot : 0}</div>
+                    <div className="finish-button"><Button size="large" onClick={this.finishRound}>Next Round</Button></div>
                 </div>
             )
         } else {
@@ -246,15 +289,25 @@ class Room extends Component {
     }
 
     buttonPanel() {
+        if (this.state.waiting) {
+            return (
+                <div className="message">
+                    Waiting for opponent...
+                </div>
+            )
+        }
         if (this.state.gameState === 3) {
             return this.result()
         }
         if (this.state.playerNumber === 1) {
             if (this.state.gameState === 1) {
                 return (
-                    <div className="button-panel">
-                        <div className="column"><Button onClick={() => { this.move('pass') }}>Pass</Button></div>
-                        <div className="column"><Button color="yellow" onClick={() => { this.move('raise') }}>Raise</Button></div>
+                    <div>
+                        <div className="message"> It's your turn! </div>
+                        <div className="button-panel">
+                            <div className="column"><Button size="large" onClick={() => { this.move('pass') }}>Pass</Button></div>
+                            <div className="column"><Button size="large" color="yellow" onClick={() => { this.move('raise') }}>Raise</Button></div>
+                        </div>
                     </div>
                 )
             } else if (this.state.gameState === 2) {
@@ -274,10 +327,10 @@ class Room extends Component {
             if (this.state.gameState === 2) {
                 return (
                     <div>
-                        <div className="message"> Opponent chose to {this.state.opponentAction} </div>
+                        <div className="message"> Opponent chose to {this.state.opponentAction}, now it's your turn! </div>
                         <div className="button-panel">
-                            <div className="column"><Button color="red" onClick={() => { this.move('give up') }}>Give up</Button></div>
-                            <div className="column"><Button color="green" onClick={() => { this.move('match') }}>Match</Button></div>
+                            <div className="column"><Button size="large" color="red" onClick={() => { this.move('give up') }}>Give up</Button></div>
+                            <div className="column"><Button size="large" color="green" onClick={() => { this.move('match') }}>Match</Button></div>
                         </div>
                     </div>
                 )
@@ -298,7 +351,7 @@ class Room extends Component {
     score() {
         if (this.state.playerNumber === 1 || this.state.playerNumber === 2) {
             return (
-                <div className="message">
+                <div className="scoreboard">
                     <div className="score">
                         Your score: {this.state.myScore}
                     </div>
@@ -345,17 +398,17 @@ class Room extends Component {
                     <Modal.Content>
                         <div className="modal-content">
                             <p>
-                                Welcome to the AKQ game! There may be some bugs here or there,
-                                so below are some tips to help guide you:
+                                Welcome to the AKQ game! Below are some tips to guide you:
                             </p>
 
                             <ul>
-                                <li>On the top of the page, there will be a guide
+                                <li>On the top of the page, there will be a help button
                                 containing the rules should you need it. </li>
                                 <li> Only share the link with one other person. </li>
                                 <li>Never refresh or press back; all progress will be lost. </li>
-                                <li> There may be lag at time so please be patient. </li>
-                                <li> Since it costs 1 to play, 1 is deducted from both player's scores at the start of each round. </li>
+                                <li> There may be lag at times so please be patient. </li>
+                                <li> If the site breaks down or is taking too long, both players should exit and create a new game. </li>
+                                <li> Since it costs 1 chip to play, 1 chip is deducted from both player's scores at the start of each round. </li>
                                 <li>The player going first sees the following buttons: </li>
                                 <div className="button-panel">
                                     <div className="column"><Button>Pass</Button></div>

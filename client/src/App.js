@@ -41,7 +41,7 @@ class App extends Component {
             <Route path="/" render={() => {return (
               <div className="App">
                 <header className="App-header">
-                  <Button onClick = {this.createGame}>Create Game</Button> 
+                  <Button size="large" onClick = {this.createGame}>Create Game</Button> 
                 </header>
               </div>
             );}} />
