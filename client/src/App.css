@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #16181c;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -26,6 +26,48 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.message{
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.column{
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.button-panel{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.score{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.modal-content{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+
+}
+
+#navbar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 @keyframes App-logo-spin {
