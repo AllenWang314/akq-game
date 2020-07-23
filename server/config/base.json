@@ -1,0 +1,13 @@
+{
+	"db": {
+		"host": "ec2-52-202-66-191.compute-1.amazonaws.com",
+		"database": "dcuq6sgiu5lr4l",
+		"user": "fuoppwmyfqmobt",
+		"port": 5432,
+		"password": "f8957d482c34c55fdc28b56fbc894c786eb4224d58157888ad61fad890f84c88",
+		"uri": "postgres://fuoppwmyfqmobt:f8957d482c34c55fdc28b56fbc894c786eb4224d58157888ad61fad890f84c88@ec2-52-202-66-191.compute-1.amazonaws.com:5432/dcuq6sgiu5lr4l"
+	},
+	"server": {
+		"addr": ":8080"
+	}
+}
