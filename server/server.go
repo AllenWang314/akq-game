@@ -25,6 +25,7 @@ func Init(port int) {
 
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(http.Dir("build")))
+	mux.Handle("/room/*", http.FileServer(http.Dir("build")))
 	mux.Handle("/api/", r)
 
 	addr := ":" + os.Getenv("PORT")
