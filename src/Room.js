@@ -6,7 +6,7 @@ import Rules from "./Rules";
 
 import './App.css';
 
-const api = "http://localhost:8080/api/"
+const api = "https://akq-game.herokuapp.com/api/"
 const cards = ["A", "K", "Q"]
 
 class Room extends Component {
@@ -51,7 +51,7 @@ class Room extends Component {
     }
 
     componentDidMount() {
-        this.conn = new WebSocket('ws://localhost:8080/ws');
+        this.conn = new WebSocket('ws://akq-game.herokuapp.com/ws');
         this.conn.onmessage = (message) => {
             this.handleMessage(JSON.parse(message.data));
         };
