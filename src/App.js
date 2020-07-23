@@ -32,9 +32,16 @@ class App extends Component {
   }
 
   joinGame() {
-    this.setState({
-      redirect: "/room/" + prompt("Enter room code:")
-    });
+    let slug = prompt("Enter room code:")
+    if (slug !== null) {
+      this.setState({
+        redirect: "/room/" + slug
+      });
+    } else {
+      this.setState({
+        redirect: "/"
+      });
+    }
   }
 
   render() {
