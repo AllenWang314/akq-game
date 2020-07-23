@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"os"
 
 	"github.com/AllenWang314/akq-game/socket"
 )
@@ -27,7 +28,8 @@ func Init(port int) {
 	mux.Handle("/", http.FileServer(http.Dir("build")))
 	mux.Handle("/api/", r)
 
-	addr := ":" + strconv.Itoa(port)
+	addr := ":" + os.Getenv("PORT")
+
 
 	// Start the server
 	fmt.Println("Serving at", addr)
