@@ -3,6 +3,9 @@ A multiplayer implementation of Caro's AKQ game in Golang and React; WebSocket, 
 
 ## Background
 
+This game was implemented as a tool during a talk at MathILy 2020. The talk was analyzing the strategies behind this game, and it provides a high-level overview of 
+the mathematics behind poker and its variants. The game was originally introduced to me by Brian in MIT Poker club's new member education program. Some of the analysis can be found [here](https://web.mit.edu/willma/www/2013lec3.pdf). The coding was largely helped by the fact that I've been working on similar things in HackMIT (top secret---coming September 2020!) So some of the code was structured like a boilerplate that Jack had made. (Thanks Jack! You're awesome!)
+
 ## Design and Features
 
 The frontend of the game was written in React with most of the styling done with semantic ui. The game includes the following features:
@@ -12,7 +15,7 @@ The frontend of the game was written in React with most of the styling done with
 - Intuitive UI + Buttons
 
 ## Implementation
-This app implements Mike Caro's AKQ game. The app is deployed at [Heroku](https://akq-game.herokuapp.com/). There, you can create a game room and share the room's
+This app implements Mike Caro's AKQ game. The app is deployed at [https://akq-game.herokuapp.com/](https://akq-game.herokuapp.com/). There, you can create a game room and share the room's
 code with an opponent anywhere in the world to play against. Everything is done in real time with the help of WebSockets and gorilla/websocket. The backend has a 
 rest api that helps it keep track of rooms and clients. It has a single database to keep track of the updates received via the api. On the frontend, I use axios
 to make the api calls and WebSocket to establish a connection. Things are quite unsecure and may be done in a hacky way, so sometimes the deployment of the app will 
