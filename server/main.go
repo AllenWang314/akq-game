@@ -24,5 +24,5 @@ func main() {
   
     config.Init(*environment)
     db.Init(*reset)
-    server.Init(*port)
+    server.Init(*port, *environment)
 }

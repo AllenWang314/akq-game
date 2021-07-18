@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { Button, Modal, Header, Dimmer, Loader } from 'semantic-ui-react';
 import axios from "axios";
-
 import { Rules } from "./Rules";
-
 import './App.css';
 
-const api = "http://localhost:8080/api/"
 const cards = ["A", "K", "Q"]
+const API_URL = process.env.API_URL ?? "http://localhost:8080/api"
 
 class Room extends Component {
     constructor(props) {
@@ -219,7 +217,7 @@ class Room extends Component {
     }
 
     join() {
-        axios.put(api + "rooms/join/" + this.state.slug,
+        axios.put(API_URL + "/rooms/join/" + this.state.slug,
             {},
             {
                 headers: { "Access-Control-Allow-Origin": "*" }

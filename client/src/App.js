@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import axios from "axios";
-
 import Room from "./Room";
-
 import './App.css';
 
-const api = "http://localhost:8080/api"
+const API_URL = process.env.API_URL ?? "http://localhost:8080/api"
 
 class App extends Component {
   constructor(props) {
@@ -21,7 +19,7 @@ class App extends Component {
   }
 
   createGame() {
-    axios.post(api + "/rooms",
+    axios.post(API_URL + "/rooms",
       { "num_clients": 0 },
       { headers: { "Access-Control-Allow-Origin": "*" }
     }).then((res) => {
