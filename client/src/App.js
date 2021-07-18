@@ -17,6 +17,7 @@ class App extends Component {
       modal: false,
     }
     this.createGame = this.createGame.bind(this)
+    this.joinGame = this.joinGame.bind(this)
   }
 
   createGame() {
@@ -28,6 +29,19 @@ class App extends Component {
         redirect: "/room/" + res.data.slug
       });
     })
+  }
+
+  joinGame() {
+    let slug = prompt("Enter room code:")
+    if (slug !== null) {
+      this.setState({
+        redirect: "/room/" + slug
+      });
+    } else {
+      this.setState({
+        redirect: "/"
+      });
+    }
   }
 
   render() {
@@ -42,6 +56,7 @@ class App extends Component {
               <div className="App">
                 <header className="App-header">
                   <Button size="large" onClick = {this.createGame}>Create Game</Button> 
+                  <Button size="large" onClick = {this.joinGame}>Join Game</Button>
                 </header>
               </div>
             );}} />

@@ -18,7 +18,16 @@ var (
 // Initial method that creates connection with database
 func Init(reset bool) {
 	config := config.GetConfig()
-	db, err := sql.Open("postgres", config.GetString("db.uri"))
+	psqlInfo := fmt.Sprintf(
+		"host=%s "+
+			"port=%d "+
+			"dbname=%s "+
+			"sslmode=%s ",
+		config.Get("db.host"),
+		config.GetInt("db.port"),
+		config.Get("db.dbname"),
+		config.Get("db.sslmode"))
+	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		panic(err)
 	}
@@ -34,7 +43,7 @@ func Init(reset bool) {
 
 	// drop and reset the database if prompted
 	if reset {
-		_, err := database.Exec(`DROP TABLE rooms`)
+		_, err := database.Exec(`DROP TABLE IF EXISTS rooms`)
 		if err != nil {
 			panic(err)
 		}
