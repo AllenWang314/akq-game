@@ -16,17 +16,33 @@ var (
 )
 
 // Initial method that creates connection with database
-func Init(reset bool) {
+func Init(reset bool, isProduction bool) {
 	config := config.GetConfig()
-	psqlInfo := fmt.Sprintf(
-		"host=%s "+
+	var psqlInfo string;
+	if isProduction {
+		psqlInfo = fmt.Sprintf(
+			"host=%s "+
 			"port=%d "+
 			"dbname=%s "+
 			"sslmode=%s ",
-		config.Get("db.host"),
-		config.GetInt("db.port"),
-		config.Get("db.dbname"),
-		config.Get("db.sslmode"))
+			config.Get("db.host"),
+			config.GetInt("db.port"),
+			config.Get("db.dbname"),
+			config.Get("db.sslmode"),
+		)
+		// psqlInfo = config.GetString("db.uri")
+	} else {
+		psqlInfo = fmt.Sprintf(
+			"host=%s "+
+			"port=%d "+
+			"dbname=%s "+
+			"sslmode=%s ",
+			config.Get("db.host"),
+			config.GetInt("db.port"),
+			config.Get("db.dbname"),
+			config.Get("db.sslmode"),
+		)
+	}
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		panic(err)

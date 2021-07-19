@@ -11,8 +11,7 @@ import (
 	"github.com/AllenWang314/akq-game/socket"
 )
 
-func Init(port int, environment string) {
-	fmt.Println(environment)
+func Init(port int, isProduction bool) {
 	hub := new(socket.Hub).Init()
 
 	// Wait for socket messages
@@ -22,7 +21,7 @@ func Init(port int, environment string) {
 	r := newRouter()
 
 	// check if dev or production
-	if strings.HasPrefix(environment, "prod") {
+	if isProduction {
         // frontend build
 		fmt.Println("hi")
 		fs := http.FileServer(http.Dir("build"))

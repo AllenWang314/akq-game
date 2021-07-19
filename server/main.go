@@ -4,6 +4,7 @@ import(
     "fmt"
     "flag"
     "os"
+    "strings"
 
     "github.com/AllenWang314/akq-game/config"
     "github.com/AllenWang314/akq-game/server"
@@ -22,7 +23,8 @@ func main() {
 
     flag.Parse()
   
+    isProduction := strings.HasPrefix(*environment, "prod")
     config.Init(*environment)
-    db.Init(*reset)
-    server.Init(*port, *environment)
+    db.Init(*reset, isProduction)
+    server.Init(*port, isProduction)
 }
