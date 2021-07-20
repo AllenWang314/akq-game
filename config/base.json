@@ -1,0 +1,12 @@
+{
+	"db": {
+		"uri": "postgres://jzuehpfckjsxdd:53e67686bf00a5e1c528c8f7c892e6c713e0997f36bf06f115e9c403cf593919@ec2-34-194-14-176.compute-1.amazonaws.com:5432/dcnu8s9vcd9a5s",
+		"host": "localhost",
+		"port": 5432,
+		"dbname": "akq",
+		"sslmode": "disable"
+	},
+	"server": {
+		"addr": ":8080"
+	}
+}

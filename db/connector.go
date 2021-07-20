@@ -21,17 +21,17 @@ func Init(reset bool, isProduction bool) {
 	config := config.GetConfig()
 	var psqlInfo string;
 	if isProduction {
-		psqlInfo = fmt.Sprintf(
-			"host=%s "+
-			"port=%d "+
-			"dbname=%s "+
-			"sslmode=%s ",
-			config.Get("db.host"),
-			config.GetInt("db.port"),
-			config.Get("db.dbname"),
-			config.Get("db.sslmode"),
-		)
-		// psqlInfo = config.GetString("db.uri")
+		// psqlInfo = fmt.Sprintf(
+		// 	"host=%s "+
+		// 	"port=%d "+
+		// 	"dbname=%s "+
+		// 	"sslmode=%s ",
+		// 	config.Get("db.host"),
+		// 	config.GetInt("db.port"),
+		// 	config.Get("db.dbname"),
+		// 	config.Get("db.sslmode"),
+		// )
+		psqlInfo = config.GetString("db.uri")
 	} else {
 		psqlInfo = fmt.Sprintf(
 			"host=%s "+

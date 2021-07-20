@@ -12,7 +12,7 @@ import(
 )
 
 func main() {
-    environment := flag.String("e", "dev", "")
+    environment := flag.String("e", "prod", "")
     port :=  flag.Int("p", 8080, "")
     reset := flag.Bool("reset", false, "Resets the database")
 
