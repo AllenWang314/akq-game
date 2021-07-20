@@ -3,7 +3,7 @@ package server
 import (
 	"log"
 	"net/http"
-	"strconv"
+	// "strconv"
 	"strings"
 	"os"
 	"path"
@@ -49,7 +49,7 @@ func Init(port int, isProduction bool) {
 		})
 
 		// start server
-		addr := ":" + strconv.Itoa(port)
+		addr := ":" + os.Getenv("PORT")
 		log.Println("Serving at", addr)
 		err := http.ListenAndServe(addr, mux)
 
@@ -68,7 +68,7 @@ func Init(port int, isProduction bool) {
 		http.Handle("/", r)
 
 		// start server
-		addr := ":" + strconv.Itoa(port)
+		addr := ":" + os.Getenv("PORT")
 		log.Println("Serving at", addr)
 		err := http.ListenAndServe(addr, nil)
 
