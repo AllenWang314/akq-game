@@ -7,6 +7,14 @@
   pointer-events: none;
 }
 
+h1 {
+  font-size: 4vw;
+}
+
+h2 {
+  font-size: 1.5vw;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -105,11 +113,6 @@
   bottom: 25px;
 }
 
-#navbar {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
 
 @keyframes App-logo-spin {
   from {
@@ -118,4 +121,27 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.directions {
+  margin: 1vw;
+  font-size: 1vw;
+  width: 400px;
+  text-align: left;
+}
+
+.home-buttons {
+  padding-top: 1vw;
+  display: flex;
+  flex-direction: horizontal;
+}
+
+.flex-button {
+  margin: 1vw;
+}
+
+.akq-image {
+  border-radius: 10px;
+  width: 400px;
+  margin: 2vw;
 }

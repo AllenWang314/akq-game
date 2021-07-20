@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Modal, Header, Dimmer, Loader } from 'semantic-ui-react';
 import axios from "axios";
-import { Rules } from "./Rules";
+import { Navigation } from "./Navigation";
 import './App.css';
 
 const cards = ["A", "K", "Q"]
@@ -385,7 +385,7 @@ class Room extends Component {
             <div className="App">
                 <header className="App-header">
                     <div className="menu" id="navbar">
-                        <Rules />
+                        <Navigation />
                     </div>
                     {this.message()}
                     {this.buttonPanel()}

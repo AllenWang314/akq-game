@@ -1,68 +1,76 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'semantic-ui-react';
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import axios from "axios";
 import Room from "./Room";
+import { Navigation } from "./Navigation";
 import './App.css';
+import akq_image from './akq_image.png';
 
 const API_URL = process.env.API_URL ?? "http://localhost:8080/api"
 
-class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      redirect: null,
-      modal: false,
-    }
-    this.createGame = this.createGame.bind(this)
-    this.joinGame = this.joinGame.bind(this)
-  }
+export const App = () => {
 
-  createGame() {
+  const [redirect, setRedirect] = useState(null)
+  // const [modal, setModal] = useState(false)
+
+  const createGame = () => {
     axios.post(API_URL + "/rooms",
       { "num_clients": 0 },
-      { headers: { "Access-Control-Allow-Origin": "*" }
-    }).then((res) => {
-      this.setState({
-        redirect: "/room/" + res.data.slug
-      });
-    })
+      {
+        headers: { "Access-Control-Allow-Origin": "*" }
+      }).then(res => {
+        setRedirect("/room/" + res.data.slug)
+      })
   }
 
-  joinGame() {
+  const joinGame = () => {
     let slug = prompt("Enter room code:")
     if (slug !== null) {
-      this.setState({
-        redirect: "/room/" + slug
-      });
+      setRedirect("/room/" + slug)
     } else {
-      this.setState({
-        redirect: "/"
-      });
+      setRedirect("/")
     }
   }
 
-  render() {
-    return (
-      <BrowserRouter>
-        {this.state.redirect && <Redirect to={this.state.redirect} />}
-        <main className="content-container">
-          <Switch>
-            <Route path="/room/:id" component={Room} />
-            <Route path="/fail" render={() => {}} />
-            <Route path="/" render={() => {return (
+  return (
+    <BrowserRouter>
+      {redirect && <Redirect to={redirect} />}
+      <main className="content-container">
+        <Switch>
+          <Route path="/room/:id" component={Room} />
+          <Route path="/fail" render={() => { }} />
+          <Route path="/" render={() => {
+            return (
               <div className="App">
                 <header className="App-header">
-                  <Button size="large" onClick = {this.createGame}>Create Game</Button> 
-                  <Button size="large" onClick = {this.joinGame}>Join Game</Button>
+                  <div className="menu" id="navbar">
+                    <Navigation />
+                  </div>
+                  <div>
+                    <h1>AKQ</h1>
+                    <h2>A 2-player, 3-card, betting game</h2>
+                  </div>
+                    <img className="akq-image" src={akq_image}/>
+                  <div className="directions">
+                    The AKQ game is a game that involves a deck containing exactly three cards the ace (A), the king (K), and the queen (Q). To learn the rules, click the question mark icon. To return to this page, click the home icon. To begin game play, create a game below and share the game code or link with another player. To join a game, click the join game button.
+                  </div>
+                  <div className="home-buttons">
+                    <div className = "flex-button">
+                      <Button size="large" onClick={createGame}>Create Game</Button>
+                    </div>
+                    <div className = "flex-button">
+                      <Button size="large" onClick={joinGame}>Join Game</Button>
+                    </div>
+                  </div>
                 </header>
               </div>
-            );}} />
-          </Switch>
-        </main>
-      </BrowserRouter>
-    );
-  }
+            );
+          }} />
+        </Switch>
+      </main>
+    </BrowserRouter>
+  );
 }
 
 export default App;
