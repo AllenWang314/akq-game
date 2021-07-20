@@ -1,5 +1,7 @@
 import random
 
+# script for generating cards for both opponents
+
 cards = ["A", "K", "Q"]
 arr = []
 
