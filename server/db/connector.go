@@ -82,7 +82,6 @@ func InitializeTable() {
 
 // POST request for database
 func InsertRoom(r *models.Room) (roomData *models.Room) {
-	fmt.Println("insert room reached")
 	slug, _ := uuid.NewUUID()
 
 	room := new(models.Room).Init()

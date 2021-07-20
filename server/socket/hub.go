@@ -1,6 +1,7 @@
 package socket
 
 import (
+	"fmt"
 	"log"
 	"encoding"
 	"encoding/json"
@@ -51,23 +52,25 @@ func (h *Hub) Run() {
 	}
 }
 
-// Sends a message to all of our clients
+// Sends a message to all of our clients of a certain slug
 func (h *Hub) Send(slug string, msg encoding.BinaryMarshaler) {
 	data, _ := msg.MarshalBinary()
-	h.SendBytes(data)
+	h.SendBytes(slug, data)
 }
 
-func (h *Hub) SendBytes(msg []byte) {
+func (h *Hub) SendBytes(slug string, msg []byte) {
 	log.Println("Sending message to all clients")
 	for _ , client := range h.clients {
-		client.send <- msg
+		if client.slug == slug {
+			client.send <- msg
+		}
 	}
 }
 
 // Processes an incoming message
 func (h *Hub) processMessage(m *SocketMessage) {
 	res := packet.BasePacket{}
-
+	fmt.Println(m.sender.slug)
 	if err := json.Unmarshal(m.msg, &res); err != nil {
 		// TODO: Log to Sentry or something -- this should never happen
 		log.Println("ERROR: Received invalid JSON message in processMessage!")
@@ -75,31 +78,40 @@ func (h *Hub) processMessage(m *SocketMessage) {
 	}
 
 	switch res.Type {
-	case "join":
-		log.Println("Received join packet")
-		res := packet.JoinPacket{}
-		json.Unmarshal(m.msg, &res)
+		// each player sends a join packet when joined to populate room
+		// game begins with the second player joins the room
+		case "join":
+			log.Println("Received join packet")
+			res := packet.JoinPacket{}
+			json.Unmarshal(m.msg, &res)
+			m.sender.slug = res.Slug
 
-		h.Send(res.Slug, res)
-	case "round":
-		log.Println("Received round packet")
-		res := packet.RoundPacket{}
-		json.Unmarshal(m.msg, &res)
-	
-		res.GenerateCard()
-		h.Send(res.Slug, res)
-	case "turn":
-		log.Println("Received turn packet")
-		res := packet.TurnPacket{}
-		json.Unmarshal(m.msg, &res)
+			h.Send(res.Slug, res)
+		// generates the cards for the next round
+		// to avoid duplication, only player 2's packet generates valid cards
+		case "round":
+			log.Println("Received round packet")
+			res := packet.RoundPacket{}
+			json.Unmarshal(m.msg, &res)
+		
+			res.GenerateCard()
+			if res.Valid {
+				h.Send(res.Slug, res)
+			}
+		// packet representing a player's turn
+		case "turn":
+			log.Println("Received turn packet")
+			res := packet.TurnPacket{}
+			json.Unmarshal(m.msg, &res)
 
-		h.Send(res.Slug, res)
-	case "finish":
-		log.Println("Received finish packet")
-		res := packet.FinishPacket{}
-		json.Unmarshal(m.msg, &res)
+			h.Send(res.Slug, res)
+		// packet representing confirmation of round completion
+		case "finish":
+			log.Println("Received finish packet")
+			res := packet.FinishPacket{}
+			json.Unmarshal(m.msg, &res)
 
-		h.Send(res.Slug, res)
+			h.Send(res.Slug, res)
 	}
 
 }

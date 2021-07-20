@@ -18,6 +18,9 @@ type Client struct {
 
 	// ID uniquely identifying this client
 	id string
+
+	// slug room that client belongs in
+	slug string
 }
 
 func NewClient(hub *Hub, conn *websocket.Conn) *Client {
@@ -26,5 +29,6 @@ func NewClient(hub *Hub, conn *websocket.Conn) *Client {
 	c.conn = conn
 	c.send = make(chan []byte, 256)
 	c.id = uuid.New().String()
+	c.slug = ""
 	return c
 }

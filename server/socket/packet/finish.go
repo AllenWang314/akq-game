@@ -16,7 +16,7 @@ type FinishPacket struct {
 
 func NewFinishPacket() *FinishPacket {
 	p := new(FinishPacket)
-	p.BasePacket = BasePacket{Type: "join"}
+	p.BasePacket = BasePacket{Type: "finish"}
 	return p
 }
 

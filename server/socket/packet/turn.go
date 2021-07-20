@@ -18,7 +18,7 @@ type TurnPacket struct {
 
 func NewTurnPacket() *JoinPacket {
 	p := new(JoinPacket)
-	p.BasePacket = BasePacket{Type: "join"}
+	p.BasePacket = BasePacket{Type: "turn"}
 	return p
 }
 
