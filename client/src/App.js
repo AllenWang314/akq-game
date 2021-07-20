@@ -3,9 +3,12 @@ import { Button } from 'semantic-ui-react';
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import axios from "axios";
 import Room from "./Room";
-import { Navigation } from "./Navigation";
+// import { NavMenu } from "./NavMenu";
 import './App.css';
 import akq_image from './akq_image.png';
+import { Icon } from 'semantic-ui-react'
+import { NavLink } from 'react-router-dom';
+import { Rules } from "./Rules";
 
 const API_URL = process.env.API_URL ?? "http://localhost:8080/api"
 
@@ -45,7 +48,14 @@ export const App = () => {
               <div className="App">
                 <header className="App-header">
                   <div className="menu" id="navbar">
-                    <Navigation />
+                  <div className="nav-menu">
+                        <div id="home-nav">
+                            <NavLink to="/" style = {{color: "white"}}> <Icon name='home'/> </NavLink>
+                        </div>
+                        <div id = "rule-nav">
+                            <Rules />
+                        </div>
+                    </div>
                   </div>
                   <div>
                     <h1>AKQ</h1>

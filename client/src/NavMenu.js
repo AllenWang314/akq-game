@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { Rules } from "./Rules";
 import "./Navigation.css"
 
-export const Navigation = () => {
+export const NavMenu = () => {
 
     return (
         // <div className="NavBar">
@@ -12,14 +12,14 @@ export const Navigation = () => {
         //         <ul className="NavLinks">
         //             <li><NavLink to="/" className="AboutLink"> Home </NavLink></li>
         //             <li><NavLink to="/about" className="AboutLink"> About </NavLink></li>
-        <div className="navigation">
+        <div className="nav-menu">
             <div id="home-nav">
                 <NavLink to="/" style = {{color: "white"}}> <Icon name='home'/> </NavLink>
             </div>
             <div id = "rule-nav">
                 <Rules />
             </div>
-        </div>
+         </div>
         //     </nav>
         // </div>
     );

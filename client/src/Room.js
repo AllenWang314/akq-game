@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Button, Modal, Header, Dimmer, Loader } from 'semantic-ui-react';
 import axios from "axios";
-import { Navigation } from "./Navigation";
+// import { NavMenu } from "./NavMenu";
 import './App.css';
+import { Icon } from 'semantic-ui-react'
+import { NavLink } from 'react-router-dom';
+import { Rules } from "./Rules";
 
 const cards = ["A", "K", "Q"]
 const API_URL = process.env.API_URL ?? "http://localhost:8080/api"
@@ -385,7 +388,14 @@ class Room extends Component {
             <div className="App">
                 <header className="App-header">
                     <div className="menu" id="navbar">
-                        <Navigation />
+                    <div className="nav-menu">
+                        <div id="home-nav">
+                            <NavLink to="/" style = {{color: "white"}}> <Icon name='home'/> </NavLink>
+                        </div>
+                        <div id = "rule-nav">
+                            <Rules />
+                        </div>
+                    </div>
                     </div>
                     {this.message()}
                     {this.buttonPanel()}
