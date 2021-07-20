@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 	// "strconv"
-	"strings"
+	// "strings"
 	"os"
-	"path"
+	// "path"
 
 	"github.com/AllenWang314/akq-game/socket"
 )
@@ -26,7 +26,7 @@ func Init(port int, isProduction bool) {
 		fs := http.FileServer(http.Dir("./build"))
 
 		mux := http.NewServeMux()
-		mux.Handle("/", http.FileServer(http.Dir("build")))
+		mux.Handle("/", fs)
 		mux.Handle("/api/", r)
 
 		// Websocket connection endpoint
