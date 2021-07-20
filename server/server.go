@@ -23,7 +23,7 @@ func Init(port int, isProduction bool) {
 	// check if dev or production
 	if isProduction {
         // frontend build
-		fs := http.FileServer(http.Dir("build"))
+		fs := http.FileServer(http.Dir("./build"))
 
 		mux := http.NewServeMux()
 		mux.Handle("/api/", r)
