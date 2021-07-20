@@ -26,6 +26,7 @@ func Init(port int, isProduction bool) {
 		fs := http.FileServer(http.Dir("./build"))
 
 		mux := http.NewServeMux()
+		mux.Handle("/", http.FileServer(http.Dir("build")))
 		mux.Handle("/api/", r)
 
 		// Websocket connection endpoint
