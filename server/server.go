@@ -33,23 +33,23 @@ func Init(port int, isProduction bool) {
 		mux.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 			socket.ServeWs(hub, w, r)
 		})
-		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-			// If the requested file exists then return if; otherwise return index.html (fileserver default page)
-			log.Println(r.URL.Path)
-			if r.URL.Path != "/" {
-				fullPath := "./build/" + strings.TrimPrefix(path.Clean(r.URL.Path), "/")
-				_, err := os.Stat(fullPath)
-				if err != nil {
-					if !os.IsNotExist(err) {
-						panic(err)
-					}
-					// Requested file does not exist so we return the default (resolves to index.html)
-					r.URL.Path = "/"
-				}
-			}
-			log.Println(r.URL.Path)
-			fs.ServeHTTP(w, r)
-		})
+		// mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// 	// If the requested file exists then return if; otherwise return index.html (fileserver default page)
+		// 	log.Println(r.URL.Path)
+		// 	if r.URL.Path != "/" {
+		// 		fullPath := "./build/" + strings.TrimPrefix(path.Clean(r.URL.Path), "/")
+		// 		_, err := os.Stat(fullPath)
+		// 		if err != nil {
+		// 			if !os.IsNotExist(err) {
+		// 				panic(err)
+		// 			}
+		// 			// Requested file does not exist so we return the default (resolves to index.html)
+		// 			r.URL.Path = "/"
+		// 		}
+		// 	}
+		// 	log.Println(r.URL.Path)
+		// 	fs.ServeHTTP(w, r)
+		// })
 
 		// start server
 		addr := ":" + os.Getenv("PORT")
