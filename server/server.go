@@ -34,6 +34,7 @@ func Init(port int, isProduction bool) {
 		})
 		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 			// If the requested file exists then return if; otherwise return index.html (fileserver default page)
+			log.Println(r.URL.Path)
 			if r.URL.Path != "/" {
 				fullPath := "./build/" + strings.TrimPrefix(path.Clean(r.URL.Path), "/")
 				_, err := os.Stat(fullPath)
@@ -45,6 +46,7 @@ func Init(port int, isProduction bool) {
 					r.URL.Path = "/"
 				}
 			}
+			log.Println(r.URL.Path)
 			fs.ServeHTTP(w, r)
 		})
 
