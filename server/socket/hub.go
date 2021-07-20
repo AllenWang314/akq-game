@@ -1,7 +1,6 @@
 package socket
 
 import (
-	"fmt"
 	"log"
 	"encoding"
 	"encoding/json"
@@ -58,8 +57,8 @@ func (h *Hub) Send(slug string, msg encoding.BinaryMarshaler) {
 	h.SendBytes(slug, data)
 }
 
+// Sending bytes of data to specific room with slug
 func (h *Hub) SendBytes(slug string, msg []byte) {
-	log.Println("Sending message to all clients")
 	for _ , client := range h.clients {
 		if client.slug == slug {
 			client.send <- msg
@@ -70,9 +69,7 @@ func (h *Hub) SendBytes(slug string, msg []byte) {
 // Processes an incoming message
 func (h *Hub) processMessage(m *SocketMessage) {
 	res := packet.BasePacket{}
-	fmt.Println(m.sender.slug)
 	if err := json.Unmarshal(m.msg, &res); err != nil {
-		// TODO: Log to Sentry or something -- this should never happen
 		log.Println("ERROR: Received invalid JSON message in processMessage!")
 		return
 	}
@@ -98,14 +95,14 @@ func (h *Hub) processMessage(m *SocketMessage) {
 			if res.Valid {
 				h.Send(res.Slug, res)
 			}
-		// packet representing a player's turn
+		// represents player's turn
 		case "turn":
 			log.Println("Received turn packet")
 			res := packet.TurnPacket{}
 			json.Unmarshal(m.msg, &res)
 
 			h.Send(res.Slug, res)
-		// packet representing confirmation of round completion
+		// confirmation of round completion
 		case "finish":
 			log.Println("Received finish packet")
 			res := packet.FinishPacket{}

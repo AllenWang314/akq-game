@@ -10,14 +10,20 @@ import (
 type RoundPacket struct {
 	BasePacket
 
-	// Client attributes
-	PlayerNumber int `json:"player_number,omitempty"`
-	Slug string `json:"slug,omitempty"`
+	// Player number: either 1 or 2
+	PlayerNumber int `json:"player_number"`
 
-	Valid bool
-	Player1Card int
-	Player2Card int
+	// room slug
+	Slug string `json:"slug"`
 
+	// whether generated card values are Valid
+	Valid bool `json:"valid"`
+
+	// Player 1's card: 0, 1, or 2
+	Player1Card int `json:"player_1_card"`
+
+	// Player 2's card: 0, 1, or 2
+	Player2Card int `json:"player_2_card"`
 }
 
 func (p *RoundPacket) GenerateCard() {

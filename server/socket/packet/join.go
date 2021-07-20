@@ -9,9 +9,11 @@ import (
 type JoinPacket struct {
 	BasePacket
 
-	// Client attributes
-	PlayerNumber int `json:"player_number,omitempty"`
-	Slug string `json:"slug,omitempty"`
+	// Player number: either 1 or 2
+	PlayerNumber int `json:"player_number"`
+
+	// room slug
+	Slug string `json:"slug"`
 }
 
 func NewJoinPacket() *JoinPacket {

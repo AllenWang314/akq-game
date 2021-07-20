@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	"github.com/AllenWang314/akq-game/config"
 	"github.com/AllenWang314/akq-game/models"
@@ -55,7 +56,7 @@ func Init(reset bool, isProduction bool) {
 	}
 	
 	// if no error ping is successful
-	fmt.Println("Ping to database successful, connection is up!")
+	log.Println("Ping to database successful, connection is up!")
 
 	// drop and reset the database if prompted
 	if reset {
@@ -74,10 +75,10 @@ func InitializeTable() {
 		"slug text," + 
 		"num_clients integer)")
 	if err != nil {
-		fmt.Println("Error in InitializeTable of connector.go")
+		log.Println("Error in InitializeTable of connector.go")
 		panic(err)
 	}
-	fmt.Println(res)
+	log.Println(res)
 }
 
 // POST request for database
@@ -90,7 +91,7 @@ func InsertRoom(r *models.Room) (roomData *models.Room) {
 	err := database.QueryRow(query).Scan(&room.Id, &room.Slug, &room.NumClients)
 
 	if err != nil {
-		fmt.Println("Error in InsertRoom of connector.go")
+		log.Println("Error in InsertRoom of connector.go")
 		panic(err)
 	}
 
@@ -105,7 +106,7 @@ func DeleteRoom(slug string) (roomData *models.Room) {
 	err := database.QueryRow(query).Scan(&room.Id, &room.Slug, &room.NumClients)
 
 	if err != nil {
-		fmt.Println("Error in DeleteRoom of connector.go")
+		log.Println("Error in DeleteRoom of connector.go")
 		panic(err)
 	}
 
@@ -120,7 +121,7 @@ func UpdateRoom(r *models.Room) (roomData *models.Room) {
 	err := database.QueryRow(query).Scan(&room.Id, &room.Slug, &room.NumClients)
 
 	if err != nil {
-		fmt.Println("Error in UpdateRoom of connector.go")
+		log.Println("Error in UpdateRoom of connector.go")
 		panic(err)
 	}
 
@@ -135,7 +136,7 @@ func GetRoom(slug string) (roomData *models.Room) {
 	err := database.QueryRow(query).Scan(&room.Id, &room.Slug, &room.NumClients)
 
 	if err != nil {
-		fmt.Println("Error in GetRoom of connector.go")
+		log.Println("Error in GetRoom of connector.go")
 		panic(err)
 	}
 
@@ -150,16 +151,9 @@ func IncrementClients(slug string) (roomData *models.Room) {
 	err := database.QueryRow(query).Scan(&room.Id, &room.Slug, &room.NumClients)
 
 	if err != nil {
-		fmt.Println("Error in IncrementClients of connector.go")
+		log.Println("Error in IncrementClients of connector.go")
 		panic(err)
 	}
 
 	return room
-}
-
-func ListenForUpdates(callback func(msg []byte)) {
-
-	for {
-		// something happens as database listens for updates from server?
-	}
 }

@@ -51,7 +51,11 @@ class Room extends Component {
     componentDidMount() {
         this.conn = new WebSocket('ws://localhost:8080/ws');
         this.conn.onmessage = (message) => {
-            this.handleMessage(JSON.parse(message.data));
+            const messageArray = message.data.split("\n");
+            for (const messageData of messageArray) {
+                console.log(messageData)
+                this.handleMessage(JSON.parse(messageData));
+            }
         };
     }
 
@@ -60,7 +64,7 @@ class Room extends Component {
         if (message.slug === this.state.slug) {
             if (message.type === "join") this.handleJoin(message.player_number);
             else if (message.type === "turn") this.handleTurn(message.player_number, message.action);
-            else if (message.type === "round" && message.Valid) this.handleCards(message);
+            else if (message.type === "round" && message.valid) this.handleCards(message);
             else if (message.type === "finish") this.handleFinish(message);
         }
     }
@@ -82,8 +86,8 @@ class Room extends Component {
             if (this.state.playerNumber === 1) {
                 this.setState({
                     roundNumber: 1,
-                    myCard: message.Player1Card,
-                    opponentCard: message.Player2Card,
+                    myCard: message.player_1_card,
+                    opponentCard: message.player_2_card,
                     gameState: 1,
                     myAction: "",
                     opponentAction: "",
@@ -97,8 +101,8 @@ class Room extends Component {
             } else {
                 this.setState({
                     roundNumber: 1,
-                    myCard: message.Player2Card,
-                    opponentCard: message.Player1Card,
+                    myCard: message.player_2_card,
+                    opponentCard: message.player_1_card,
                     gameState: 1,
                     myAction: "",
                     opponentAction: "",
@@ -115,8 +119,8 @@ class Room extends Component {
                 this.setState({
                     roundNumber: this.state.roundNumber + 1,
                     playerNumber: this.state.playerNumber % 2 + 1,
-                    myCard: message.Player2Card,
-                    opponentCard: message.Player1Card,
+                    myCard: message.player_2_card,
+                    opponentCard: message.player_1_card,
                     gameState: 1,
                     myAction: "",
                     opponentAction: "",
@@ -131,8 +135,8 @@ class Room extends Component {
                 this.setState({
                     roundNumber: this.state.roundNumber + 1,
                     playerNumber: this.state.playerNumber % 2 + 1,
-                    myCard: message.Player1Card,
-                    opponentCard: message.Player2Card,
+                    myCard: message.player_1_card,
+                    opponentCard: message.player_2_card,
                     gameState: 1,
                     myAction: "",
                     opponentAction: "",

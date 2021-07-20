@@ -4,14 +4,15 @@ import (
 	"encoding/json"
 )
 
-// Sent by clients after receiving the init packet. Identifies them to the
-// server, and in turn other clients
+// Sent by clients after confirming finishing the round
 type FinishPacket struct {
 	BasePacket
 
-	// Client attributes
-	PlayerNumber int `json:"player_number,omitempty"`
-	Slug string `json:"slug,omitempty"`
+	// Player number: either 1 or 2
+	PlayerNumber int `json:"player_number"`
+
+	// room slug
+	Slug string `json:"slug"`
 }
 
 func NewFinishPacket() *FinishPacket {

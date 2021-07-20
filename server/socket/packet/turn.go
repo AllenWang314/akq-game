@@ -4,16 +4,18 @@ import (
 	"encoding/json"
 )
 
-// Sent by clients after receiving the init packet. Identifies them to the
-// server, and in turn other clients
+// Sent by clients to indicate their turn action
 type TurnPacket struct {
 	BasePacket
 
-	// Client attributes
-	PlayerNumber int `json:"player_number,omitempty"`
-	Slug string `json:"slug,omitempty"`
+	// Player number: either 1 or 2
+	PlayerNumber int `json:"player_number"`
 
-	Action string `json:"action,omitempty"`
+	// room slug
+	Slug string `json:"slug"`
+
+	// action taken by player 
+	Action string `json:"action"`
 }
 
 func NewTurnPacket() *JoinPacket {

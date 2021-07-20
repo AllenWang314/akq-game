@@ -1,7 +1,7 @@
 package server
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -23,7 +23,6 @@ func Init(port int, isProduction bool) {
 	// check if dev or production
 	if isProduction {
         // frontend build
-		fmt.Println("hi")
 		fs := http.FileServer(http.Dir("build"))
 
 		mux := http.NewServeMux()
@@ -37,7 +36,6 @@ func Init(port int, isProduction bool) {
 			// If the requested file exists then return if; otherwise return index.html (fileserver default page)
 			if r.URL.Path != "/" {
 				fullPath := "./build/" + strings.TrimPrefix(path.Clean(r.URL.Path), "/")
-				fmt.Println(fullPath)
 				_, err := os.Stat(fullPath)
 				if err != nil {
 					if !os.IsNotExist(err) {
@@ -46,19 +44,17 @@ func Init(port int, isProduction bool) {
 					// Requested file does not exist so we return the default (resolves to index.html)
 					r.URL.Path = "/"
 				}
-				fmt.Println("bleh")
-				fmt.Println(r.URL.Path)
 			}
 			fs.ServeHTTP(w, r)
 		})
 
 		// start server
 		addr := ":" + strconv.Itoa(port)
-		fmt.Println("Serving at", addr)
+		log.Println("Serving at", addr)
 		err := http.ListenAndServe(addr, mux)
 
 		if err != nil {
-			fmt.Println("error in http listen and serve")
+			log.Println("error in http listen and serve")
 			panic(err)
 		}
     } else {
@@ -73,11 +69,11 @@ func Init(port int, isProduction bool) {
 
 		// start server
 		addr := ":" + strconv.Itoa(port)
-		fmt.Println("Serving at", addr)
+		log.Println("Serving at", addr)
 		err := http.ListenAndServe(addr, nil)
 
 		if err != nil {
-			fmt.Println("error in http listen and serve")
+			log.Println("error in http listen and serve")
 			panic(err)
 		}
 	}

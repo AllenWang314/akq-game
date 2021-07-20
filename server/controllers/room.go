@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"fmt"
 
 	"github.com/AllenWang314/akq-game/models"
 	"github.com/AllenWang314/akq-game/db"
@@ -14,7 +13,6 @@ type RoomController struct {}
 
 // POST /rooms - creates a new room
 func (r RoomController) CreateRoom(c echo.Context) error {
-	fmt.Println("create room method reached")
 	// Create new room model, parse JSON body
 	var room = new(models.Room)
 	if err := c.Bind(room); err != nil {
