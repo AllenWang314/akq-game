@@ -8,7 +8,7 @@ import { NavLink } from 'react-router-dom';
 import { Rules } from "./Rules";
 
 const cards = ["A", "K", "Q"]
-const API_URL = process.env.API_URL ?? "http://localhost:8080/api"
+const API_URL = "https://akq-game-2021.herokuapp.com/api"
 
 class Room extends Component {
     constructor(props) {
@@ -52,7 +52,7 @@ class Room extends Component {
     }
 
     componentDidMount() {
-        this.conn = new WebSocket('ws://localhost:8080/ws');
+        this.conn = new WebSocket('wss://akq-game-2021.herokuapp.com/ws');
         this.conn.onmessage = (message) => {
             const messageArray = message.data.split("\n");
             for (const messageData of messageArray) {

@@ -10,7 +10,7 @@ import { Icon } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom';
 import { Rules } from "./Rules";
 
-const API_URL = process.env.API_URL ?? "http://localhost:8080/api"
+const API_URL = "https://akq-game-2021.herokuapp.com/api"
 
 export const App = () => {
 
