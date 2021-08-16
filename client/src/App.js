@@ -3,7 +3,6 @@ import { Button } from 'semantic-ui-react';
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import axios from "axios";
 import Room from "./Room";
-// import { NavMenu } from "./NavMenu";
 import './App.css';
 import akq_image from './akq_image.png';
 import { Icon } from 'semantic-ui-react'
@@ -61,7 +60,7 @@ export const App = () => {
                     <h1>AKQ</h1>
                     <h2>A 2-player, 3-card, betting game</h2>
                   </div>
-                    <img className="akq-image" src={akq_image}/>
+                    <img className="akq-image" src={akq_image} alt=""/>
                   <div className="directions">
                     The AKQ game is a game that involves a deck containing exactly three cards the ace (A), the king (K), and the queen (Q). To learn the rules, click the question mark icon. To return to this page, click the home icon. To begin game play, create a game below and share the game code or link with another player. To join a game, click the join game button.
                   </div>

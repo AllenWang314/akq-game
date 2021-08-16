@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Modal, Header, Dimmer, Loader } from 'semantic-ui-react';
 import axios from "axios";
-// import { NavMenu } from "./NavMenu";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import './App.css';
 import { Icon } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom';
@@ -400,8 +400,14 @@ class Room extends Component {
                     {this.message()}
                     {this.buttonPanel()}
                     {this.score()}
+                    <div className="game-code-panel">
                     <div className="game-code">
                         Game code is: {this.state.slug}
+                        <CopyToClipboard text={this.state.slug}
+                        >
+                        <span id="clipboard-icon"><Icon name='clipboard'/></span>
+                        </CopyToClipboard>
+                    </div>
                     </div>
                 </header>
                 <Modal
