@@ -1,5 +1,5 @@
 # akq-game
-A multiplayer implementation of Caro's AKQ game in Golang and React; WebSocket, gorilla/socket, REST api
+A multiplayer implementation of Caro's AKQ game in Golang and React; WebSocket, gorilla/socket, REST api. Try it out [here!](https://akq.allenwang314.com/)
 
 ## Background
 
