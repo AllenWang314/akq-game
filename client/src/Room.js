@@ -9,6 +9,7 @@ import { Rules } from "./Rules";
 
 const cards = ["A", "K", "Q"]
 const API_URL = process.env.REACT_APP_API_URL ?? "http://localhost:8080/api"
+const WEBSOCKET = process.env.REACT_APP_WEBSOCKET ?? "ws://localhost:8080/ws"
 
 class Room extends Component {
     constructor(props) {
@@ -52,7 +53,7 @@ class Room extends Component {
     }
 
     componentDidMount() {
-        this.conn = new WebSocket('ws://localhost:8080/ws');
+        this.conn = new WebSocket(WEBSOCKET);
         this.conn.onmessage = (message) => {
             const messageArray = message.data.split("\n");
             for (const messageData of messageArray) {
