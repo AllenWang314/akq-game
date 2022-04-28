@@ -8,6 +8,6 @@
 		"sslmode": "disable"
 	},
 	"server": {
-		"addr": ":8080"
+		"addr": 8080
 	}
 }
