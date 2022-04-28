@@ -1,6 +1,6 @@
 module github.com/AllenWang314/akq-game
 
-go 1.17
+go 1.14
 
 require (
 	github.com/bketelsen/crypt v0.0.3-0.20200106085610-5cbc8cc4026c // indirect
