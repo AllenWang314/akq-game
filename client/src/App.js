@@ -9,12 +9,11 @@ import { Icon } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom';
 import { Rules } from "./Rules";
 
-const API_URL = process.env.API_URL ?? "http://localhost:8080/api"
+const API_URL = process.env.REACT_APP_API_URL ?? "http://localhost:8080/api"
 
 export const App = () => {
 
   const [redirect, setRedirect] = useState(null)
-  // const [modal, setModal] = useState(false)
 
   const createGame = () => {
     axios.post(API_URL + "/rooms",

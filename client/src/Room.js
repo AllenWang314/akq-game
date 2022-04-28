@@ -8,7 +8,7 @@ import { NavLink } from 'react-router-dom';
 import { Rules } from "./Rules";
 
 const cards = ["A", "K", "Q"]
-const API_URL = process.env.API_URL ?? "http://localhost:8080/api"
+const API_URL = process.env.REACT_APP_API_URL ?? "http://localhost:8080/api"
 
 class Room extends Component {
     constructor(props) {
